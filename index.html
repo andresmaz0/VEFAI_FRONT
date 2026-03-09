@@ -411,7 +411,7 @@
                 grid-template-columns: 1fr;
             }
             .actions-grid {
-                flex-direction: column-reverse; /* Botón de Buscar arriba del de Volver */
+                flex-direction: column-reverse;
                 gap: 10px;
             }
             .card { padding: 30px 20px; }
@@ -447,7 +447,7 @@
                 <div class="instruccion" style="text-align: center;">Seleccione el tipo de llanta:</div>
                 <div class="options-container">
                     <label class="option-label">
-                        <input type="radio" name="tipo_llanta" value="lt" onchange="checkLogic()">
+                        <input type="radio" name="tipo_ll_llanta" value="lt" onchange="checkLogic()">
                         <span class="option-design">LT (Light Truck)</span>
                     </label>
                     <label class="option-label">
@@ -469,8 +469,6 @@
             <h2 class="instruccion" style="font-size: 1.3rem; color: var(--go-blue); text-align: center; border-bottom: 2px solid #eee; padding-bottom: 10px;">Seleccione las características de la llanta</h2>
             
             <div class="form-grid">
-                <!-- Se ha ocultado el campo de URL de la API de la interfaz por seguridad -->
-                
                 <div class="form-group" id="grp-tipo-caract">
                     <label>Tipo de llanta</label>
                     <select id="sel-tipo-caract" class="form-control" onchange="actualizarPreview()">
@@ -743,7 +741,15 @@
                     });
 
                     if (response.status === 200) {
-                        resultData = await response.json();
+                        const data = await response.json();
+                        
+                        // Validación solicitada: Si el mensaje indica que no se encontró información
+                        if (data.message === "No se encontró información") {
+                            mostrarResultado(false);
+                            return; // Terminamos la ejecución aquí
+                        }
+                        
+                        resultData = data;
                         break;
                     } else if (response.status === 404) {
                         throw new Error('NOT_FOUND');
@@ -756,7 +762,7 @@
                         return;
                     }
                     if (i === maxRetries - 1) {
-                        // Simulación final si falla la petición real (Solo para pruebas locales)
+                        // Fallback de simulación solo si la petición real falla por completo
                         if (referencia.includes("11")) {
                             mostrarResultado(true, { FA: 40112004.0, IMPUESTO: 17, pais: pais });
                         } else {
