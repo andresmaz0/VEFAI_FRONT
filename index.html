@@ -11,6 +11,8 @@
             --go-yellow: #FEDB00;
             --white: #FFFFFF;
             --light-gray: #F3F4F6;
+            --gray: #ccc;
+            --dark-gray: #555;
         }
 
         * {
@@ -32,13 +34,14 @@
         .card {
             background-color: var(--white);
             width: 100%;
-            max-width: 550px;
+            max-width: 650px;
             padding: 45px 35px;
             border-radius: 24px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.15);
             text-align: center;
             border-top: 12px solid var(--go-yellow);
             position: relative;
+            margin: 20px 0;
         }
 
         /* Logo del zapato superior - Tamaño Grande y Optimizado */
@@ -50,7 +53,6 @@
             transition: transform 0.3s ease;
         }
 
-        /* Ocultar el icono de imagen rota si la imagen falla */
         img:not([src]) {
             visibility: hidden;
         }
@@ -73,23 +75,49 @@
             font-size: 3rem;
             color: var(--go-blue);
             letter-spacing: 6px;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             font-weight: 900;
         }
 
         .instruccion {
             font-size: 1.1rem;
             color: #222;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             font-weight: 600;
+            text-align: left;
         }
 
-        /* Contenedores de opciones */
+        /* --- Paso 1: Selección Inicial --- */
+        #step1-container {
+            position: relative;
+            padding: 10px;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+        }
+
+        /* Clase para bloquear el paso 1 */
+        #step1-container.locked {
+            opacity: 0.5;
+            filter: grayscale(100%);
+        }
+
+        .lock-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 10;
+            cursor: not-allowed;
+            display: none;
+        }
+
+        #step1-container.locked .lock-overlay {
+            display: block;
+        }
+
         .options-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .option-label {
@@ -103,7 +131,7 @@
         }
 
         .option-design {
-            padding: 20px 12px;
+            padding: 16px 12px;
             background-color: #fdfdfd;
             border: 2px solid #e5e7eb;
             border-radius: 14px;
@@ -121,24 +149,17 @@
             box-shadow: 0 6px 15px rgba(0,0,0,0.12);
         }
 
-        /* Menú secundario para Pulgadas */
         #menu-secundario {
             display: none;
-            margin-top: 25px;
-            padding-top: 30px;
+            margin-top: 15px;
+            padding-top: 20px;
             border-top: 2px dashed #eee;
             animation: slideUp 0.4s ease-out forwards;
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Botón de acción final */
         #btn-iniciar-container {
             display: none;
-            margin-top: 45px;
+            margin-top: 25px;
             animation: fadeIn 0.6s ease forwards;
         }
 
@@ -148,16 +169,15 @@
             justify-content: center;
             background-color: var(--go-blue);
             color: white;
-            padding: 16px 35px; /* Relleno ajustado */
+            padding: 16px 35px;
             border: none;
             border-radius: 60px;
             font-size: 1.3rem;
             font-weight: 800;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-decoration: none;
             box-shadow: 0 8px 20px rgba(0, 78, 168, 0.35);
-            width: auto; /* Ancho reducido (automático al contenido) */
+            width: auto;
             min-width: 200px;
         }
 
@@ -169,10 +189,189 @@
 
         .btn-iniciar img {
             height: 28px;
-            margin-left: 10px; /* Un solo espacio visual de distancia */
+            margin-left: 10px;
             filter: brightness(0) invert(1);
         }
 
+        /* --- Paso 2: Características de la Llanta --- */
+        #step2-container {
+            display: none;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 3px solid var(--go-yellow);
+            animation: fadeIn 0.6s ease forwards;
+            text-align: left;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: var(--go-blue);
+            margin-bottom: 5px;
+        }
+
+        .form-control {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+            background-color: var(--white);
+        }
+
+        .form-control:focus {
+            border-color: var(--go-blue);
+        }
+
+        /* Sección Llanta Seleccionada (Resultado) */
+        .preview-section {
+            background-color: #eef5fc;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 25px;
+            border: 2px solid var(--go-blue);
+        }
+
+        .preview-section label {
+            display: block;
+            font-weight: 800;
+            color: var(--go-blue);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .preview-input {
+            width: 100%;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--dark-gray);
+            background: transparent;
+            border: none;
+            outline: none;
+            cursor: default;
+        }
+
+        /* Botones finales */
+        .actions-grid {
+            display: flex;
+            gap: 15px;
+            justify-content: space-between;
+        }
+
+        .btn-secondary {
+            background-color: var(--gray);
+            color: #333;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+        }
+
+        .btn-secondary:hover {
+            background-color: #bbb;
+        }
+
+        .btn-primary {
+            background-color: var(--go-blue);
+            color: var(--white);
+            padding: 15px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            box-shadow: 0 4px 15px rgba(0, 78, 168, 0.3);
+        }
+
+        .btn-primary:hover {
+            background-color: #003a7d;
+        }
+
+        /* --- Modal Custom --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            border-top: 8px solid var(--go-yellow);
+            animation: slideUp 0.3s ease-out forwards;
+        }
+
+        .modal-content h3 {
+            color: var(--go-blue);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .modal-content p {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        /* Modal Verde y Animación de Lupa */
+        .modal-success {
+            border-top: 8px solid #28a745 !important;
+        }
+
+        .modal-icon-container {
+            margin-bottom: 15px;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        .btn-success {
+            background-color: #28a745 !important;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3) !important;
+        }
+
+        .btn-success:hover {
+            background-color: #218838 !important;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -180,73 +379,226 @@
 
         /* Diseño responsivo */
         @media (max-width: 480px) {
-            .options-container {
+            .options-container, .form-grid, .actions-grid {
                 grid-template-columns: 1fr;
+                flex-direction: column;
             }
-            .card {
-                padding: 40px 20px;
-            }
-            h1 {
-                font-size: 1.2rem;
-            }
-            .siglas {
-                font-size: 2.2rem;
-            }
-            .logo-top {
-                width: 160px;
-            }
-            .btn-iniciar {
-                width: 100%; /* En móviles muy pequeños sí puede ser útil el ancho completo */
-            }
+            .card { padding: 30px 20px; }
+            .logo-top { width: 160px; }
+            .siglas { font-size: 2.2rem; }
         }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <!-- Logo Principal con redundancia de carga -->
-        <img src="pictures/logo_limpio.png" alt="Logo Goodyear" class="logo-top" id="mainLogo" onerror="this.onerror=null; this.src='logo.png';">
+        <!-- Logo Principal -->
+        <img src="pictures/logo_limpio.png" alt="Logo Goodyear" class="logo-top" onerror="this.onerror=null; this.src='logo.png';">
         
         <h1>Verificación de Fracción Arancelaria e Impuestos</h1>
         <span class="siglas">VEFAI</span>
 
-        <!-- Selección de Nomenclatura -->
-        <div class="instruccion">Seleccione la nomenclatura principal de la llanta:</div>
-        <div class="options-container">
-            <label class="option-label">
-                <input type="radio" name="nomenclatura" value="milimetros" onchange="checkLogic()">
-                <span class="option-design">Milímetros</span>
-            </label>
-            <label class="option-label">
-                <input type="radio" name="nomenclatura" value="pulgadas" onchange="checkLogic()">
-                <span class="option-design">Pulgadas</span>
-            </label>
-        </div>
+        <!-- ========================================== -->
+        <!-- PASO 1: SELECCIÓN DE NOMENCLATURA Y TIPO   -->
+        <!-- ========================================== -->
+        <div id="step1-container">
+            <!-- Capa de bloqueo -->
+            <div class="lock-overlay" onclick="mostrarAlertaBloqueo()"></div>
 
-        <!-- Menú Condicional para Pulgadas -->
-        <div id="menu-secundario">
-            <div class="instruccion">Seleccione el tipo de llanta:</div>
+            <div class="instruccion" style="text-align: center;">Seleccione la nomenclatura principal de la llanta:</div>
             <div class="options-container">
                 <label class="option-label">
-                    <input type="radio" name="tipo_llanta" value="lt" onchange="checkLogic()">
-                    <span class="option-design">LT (Light Truck)</span>
+                    <input type="radio" name="nomenclatura" value="milimetros" onchange="checkLogic()">
+                    <span class="option-design">Milímetros</span>
                 </label>
                 <label class="option-label">
-                    <input type="radio" name="tipo_llanta" value="camion" onchange="checkLogic()">
-                    <span class="option-design">Camión</span>
+                    <input type="radio" name="nomenclatura" value="pulgadas" onchange="checkLogic()">
+                    <span class="option-design">Pulgadas</span>
                 </label>
+            </div>
+
+            <!-- Menú Condicional para Pulgadas -->
+            <div id="menu-secundario">
+                <div class="instruccion" style="text-align: center;">Seleccione el tipo de llanta:</div>
+                <div class="options-container">
+                    <label class="option-label">
+                        <input type="radio" name="tipo_llanta" value="lt" onchange="checkLogic()">
+                        <span class="option-design">LT (Light Truck)</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="tipo_llanta" value="camion" onchange="checkLogic()">
+                        <span class="option-design">Camión</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Botón de Inicio dinámico -->
+            <div id="btn-iniciar-container">
+                <button class="btn-iniciar" onclick="iniciarProceso()">
+                    INICIAR <img src="pictures/logo_limpio.png" alt="Logo Botón" onerror="this.onerror=null; this.src='logo.png';">
+                </button>
             </div>
         </div>
 
-        <!-- Botón de Inicio dinámico -->
-        <div id="btn-iniciar-container">
-            <button class="btn-iniciar" onclick="alert('Iniciando proceso...')">
-                INICIAR <img src="pictures/logo_limpio.png" alt="Logo Botón" onerror="this.onerror=null; this.src='logo.png';">
-            </button>
+        <!-- PASO 2: CARACTERÍSTICAS DE LA LLANTA       -->
+        <div id="step2-container">
+            <h2 class="instruccion" style="font-size: 1.3rem; color: var(--go-blue); text-align: center; border-bottom: 2px solid #eee; padding-bottom: 10px;">Seleccione las características de la llanta</h2>
+            
+            <div class="form-grid">
+                
+                <!-- Tipo de Llanta (Solo Milímetros) -->
+                <div class="form-group" id="grp-tipo-caract">
+                    <label>Tipo de llanta</label>
+                    <select id="sel-tipo-caract" class="form-control" onchange="actualizarPreview()">
+                        <option value="Auto">Auto</option>
+                        <option value="Temporal">Temporal</option>
+                        <option value="Pasajeros">Pasajeros</option>
+                        <option value="LT">LT</option>
+                        <option value="Comercial">Comercial</option>
+                        <option value="Camión">Camión</option>
+                    </select>
+                </div>
+
+                <!-- Altura de llanta (Solo Pulgadas + LT) -->
+                <div class="form-group" id="grp-altura">
+                    <label>Altura de llanta</label>
+                    <select id="sel-altura" class="form-control" onchange="actualizarPreview()">
+                        <option value="30">30</option>
+                        <option value="31">31</option>
+                        <option value="32">32</option>
+                        <option value="33">33</option>
+                        <option value="35">35</option>
+                        <option value="37">37</option>
+                        <option value="40">40</option>
+                    </select>
+                </div>
+
+                <!-- Ancho de Sección (Todos) -->
+                <div class="form-group" id="grp-ancho">
+                    <label>Ancho de sección</label>
+                    <input type="number" step="0.01" id="inp-ancho" class="form-control" placeholder="Ej. 205 o 11.5" oninput="actualizarPreview()">
+                </div>
+
+                <!-- Relación (Milímetros y Pulgadas+Camión) -->
+                <div class="form-group" id="grp-relacion">
+                    <label>Relación</label>
+                    <select id="sel-relacion" class="form-control" onchange="actualizarPreview()">
+                        <option value="/30">/30</option>
+                        <option value="/35">/35</option>
+                        <option value="/40">/40</option>
+                        <option value="/45">/45</option>
+                        <option value="/50">/50</option>
+                        <option value="/55">/55</option>
+                        <option value="/60">/60</option>
+                        <option value="/65">/65</option>
+                        <option value="/70">/70</option>
+                        <option value="/75">/75</option>
+                        <option value="/80">/80</option>
+                    </select>
+                </div>
+
+                <!-- Diámetro del rin (Todos) -->
+                <div class="form-group" id="grp-diametro">
+                    <label>Diámetro del rin</label>
+                    <select id="sel-diametro" class="form-control" onchange="actualizarPreview()">
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="14.5">14.5</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="16.5">16.5</option>
+                        <option value="17">17</option>
+                        <option value="17.5">17.5</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="19.5">19.5</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="22.5">22.5</option>
+                        <option value="24">24</option>
+                        <option value="24.5">24.5</option>
+                    </select>
+                </div>
+
+                <!-- Estructura (Todos) -->
+                <div class="form-group" id="grp-estructura">
+                    <label>Estructura de la llanta</label>
+                    <select id="sel-estructura" class="form-control" onchange="actualizarPreview()">
+                        <option value="R">RADIAL</option>
+                        <option value="-">DIAGONAL</option>
+                    </select>
+                </div>
+
+                <!-- País de origen (Todos) -->
+                <div class="form-group" id="grp-pais">
+                    <label>País de origen</label>
+                    <select id="sel-pais" class="form-control">
+                        <option value="BRASIL">BRASIL</option>
+                        <option value="USA">USA</option>
+                        <option value="CHINA">CHINA</option>
+                        <option value="COLOMBIA">COLOMBIA</option>
+                        <option value="VIETNAM">Vietnam</option>
+                        <option value="GERMANY">GERMANY</option>
+                        <option value="INDONESIA">INDONESIA</option>
+                        <option value="PERU">PERU</option>
+                        <option value="MEXICO">MEXICO</option>
+                        <option value="THAILAND">THAILAND</option>
+                        <option value="TURKEY">TURKEY</option>
+                        <option value="JAPAN">JAPAN</option>
+                        <option value="POLAND">POLAND</option>
+                        <option value="INDIA">INDIA</option>
+                        <option value="MALAYSIA">MALAYSIA</option>
+                        <option value="SLOVENIA">SLOVENIA</option>
+                        <option value="CHILE">CHILE</option>
+                        <option value="FRANCE">FRANCE</option>
+                        <option value="BRAZIL">BRAZIL</option>
+                        <option value="CANADA">CANADA</option>
+                        <option value="ALEMANIA">ALEMANIA</option>
+                        <option value="MALASIA">MALASIA</option>
+                        <option value="US">US</option>
+                        <option value="JAPON">JAPON</option>
+                        <option value="TAILANDIA">TAILANDIA</option>
+                        <option value="ESLOVENIA">ESLOVENIA</option>
+                        <option value="NAPANEE">NAPANEE</option>
+                        <option value="OTRO">OTRO</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Resultado de llanta seleccionada -->
+            <div class="preview-section">
+                <label>Llanta seleccionada:</label>
+                <input type="text" id="llanta-preview" class="preview-input" readonly value="">
+            </div>
+
+            <!-- Botones Finales -->
+            <div class="actions-grid">
+                <button class="btn-secondary" onclick="volverSeleccion()">Volver a Seleccionar Nomenclautra</button>
+                <button class="btn-primary" onclick="confirmarBusqueda()">Buscar Llanta</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación -->
+    <div id="modal-confirmacion" class="modal-overlay">
+        <div class="modal-content modal-success">
+            <div class="modal-icon-container">
+                <!-- SVG de Lupa Animada -->
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#28a745" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </div>
+            <h3 style="color: #28a745;">¡Búsqueda Iniciada!</h3>
+            <p id="modal-texto"></p>
+            <button class="btn-primary btn-success" style="width: 100%;" onclick="cerrarModal()">Aceptar</button>
         </div>
     </div>
 
     <script>
+        // Lógica de visualización del Paso 1
         function checkLogic() {
             const nomSelected = document.querySelector('input[name="nomenclatura"]:checked');
             const tipoSelected = document.querySelector('input[name="tipo_llanta"]:checked');
@@ -270,6 +622,107 @@
                     btnContainer.style.display = 'none';
                 }
             }
+        }
+
+        // Alerta si el usuario intenta hacer clic cuando está bloqueado
+        function mostrarAlertaBloqueo() {
+            alert('Opciones bloqueadas, para desbloquearlas dar en el botón "Volver a seleccionar".');
+        }
+
+        // Iniciar el proceso (Bloqueo y transición al Paso 2)
+        function iniciarProceso() {
+            const nomSelected = document.querySelector('input[name="nomenclatura"]:checked').value;
+            const tipoSelected = document.querySelector('input[name="tipo_llanta"]:checked')?.value;
+
+            // Bloquear paso 1
+            document.getElementById('step1-container').classList.add('locked');
+            document.getElementById('btn-iniciar-container').style.display = 'none';
+
+            // Configurar qué campos del paso 2 mostrar
+            document.getElementById('grp-tipo-caract').style.display = 'none';
+            document.getElementById('grp-altura').style.display = 'none';
+            document.getElementById('grp-relacion').style.display = 'none';
+
+            if (nomSelected === 'milimetros') {
+                document.getElementById('grp-tipo-caract').style.display = 'flex';
+                document.getElementById('grp-relacion').style.display = 'flex';
+            } else if (nomSelected === 'pulgadas' && tipoSelected === 'lt') {
+                document.getElementById('grp-altura').style.display = 'flex';
+            } else if (nomSelected === 'pulgadas' && tipoSelected === 'camion') {
+                document.getElementById('grp-relacion').style.display = 'flex';
+            }
+
+            // Mostrar paso 2 y resetear/calcular previsualización
+            document.getElementById('step2-container').style.display = 'block';
+            document.getElementById('inp-ancho').value = ''; // Limpiar ancho anterior
+            actualizarPreview();
+        }
+
+        // Deshacer el bloqueo y volver al Paso 1
+        function volverSeleccion() {
+            document.getElementById('step1-container').classList.remove('locked');
+            document.getElementById('step2-container').style.display = 'none';
+            document.getElementById('btn-iniciar-container').style.display = 'block';
+        }
+
+        // Generar la cadena de previsualización dinámicamente
+        function actualizarPreview() {
+            const nom = document.querySelector('input[name="nomenclatura"]:checked').value;
+            const tipoBase = document.querySelector('input[name="tipo_llanta"]:checked')?.value;
+
+            // Variables comunes
+            const ancho = document.getElementById('inp-ancho').value;
+            const diametro = document.getElementById('sel-diametro').value;
+            const estructura = document.getElementById('sel-estructura').value;
+
+            let resultado = '';
+
+            if (nom === 'milimetros') {
+                const tipoC = document.getElementById('sel-tipo-caract').value;
+                const relacion = document.getElementById('sel-relacion').value;
+                
+                let prefijo = '';
+                let sufijo = '';
+                
+                if (tipoC === 'Temporal') prefijo = 'T';
+                if (tipoC === 'Pasajeros') prefijo = 'P';
+                if (tipoC === 'LT') prefijo = 'LT';
+                if (tipoC === 'Comercial') sufijo = 'C';
+                
+                resultado = `${prefijo}${ancho}${relacion}${estructura}${diametro}${sufijo}`;
+            } 
+            else if (nom === 'pulgadas' && tipoBase === 'lt') {
+                const altura = document.getElementById('sel-altura').value;
+                
+                resultado = `${altura}X${ancho}${estructura}${diametro}LT`;
+            } 
+            else if (nom === 'pulgadas' && tipoBase === 'camion') {
+                const relacion = document.getElementById('sel-relacion').value;
+                
+                resultado = `${ancho}${relacion}${estructura}${diametro}`;
+            }
+
+            document.getElementById('llanta-preview').value = resultado;
+        }
+
+        // Mostrar Modal final
+        function confirmarBusqueda() {
+            // Validar que el Ancho de sección no esté vacío
+            const ancho = document.getElementById('inp-ancho').value.trim();
+            if (!ancho) {
+                alert('Por favor, ingrese el Ancho de sección antes de buscar la llanta.');
+                document.getElementById('inp-ancho').focus();
+                return;
+            }
+
+            const llantaGenerada = document.getElementById('llanta-preview').value;
+            document.getElementById('modal-texto').innerText = `Se empezó la búsqueda de: ${llantaGenerada}`;
+            document.getElementById('modal-confirmacion').style.display = 'flex';
+        }
+
+        // Cerrar Modal final
+        function cerrarModal() {
+            document.getElementById('modal-confirmacion').style.display = 'none';
         }
     </script>
 </body>
