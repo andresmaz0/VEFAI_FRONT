@@ -447,7 +447,7 @@
                 <div class="instruccion" style="text-align: center;">Seleccione el tipo de llanta:</div>
                 <div class="options-container">
                     <label class="option-label">
-                        <input type="radio" name="tipo_ll_llanta" value="lt" onchange="checkLogic()">
+                        <input type="radio" name="tipo_llanta" value="lt" onchange="checkLogic()">
                         <span class="option-design">LT (Light Truck)</span>
                     </label>
                     <label class="option-label">
@@ -502,6 +502,7 @@
                 <div class="form-group" id="grp-relacion">
                     <label>Relación</label>
                     <select id="sel-relacion" class="form-control" onchange="actualizarPreview()">
+                        <option value="">Vacío</option>
                         <option value="/30">/30</option>
                         <option value="/35">/35</option>
                         <option value="/40">/40</option>
